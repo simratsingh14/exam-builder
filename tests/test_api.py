@@ -101,3 +101,73 @@ def test_get_uploaded_image() -> None:
 def test_get_missing_image_returns_404() -> None:
     response = client.get("/api/uploads/nonexistent.png")
     assert response.status_code == 404
+
+
+# ── Papers ────────────────────────────────────────────────────────────────────
+
+
+def test_list_papers_empty() -> None:
+    response = client.get("/api/papers")
+    assert response.status_code == 200
+    assert response.json() == []
+
+
+def test_save_and_list_paper() -> None:
+    paper = {"header": {"title": "History Final", "subject": "History", "institution": "",
+                        "date": "", "duration": "", "total_marks": 0},
+             "questions": [], "style": {}}
+    save_resp = client.post("/api/papers", json=paper)
+    assert save_resp.status_code == 200
+    saved = save_resp.json()
+    assert saved["header"]["title"] == "History Final"
+    assert "id" in saved
+
+    list_resp = client.get("/api/papers")
+    assert list_resp.status_code == 200
+    summaries = list_resp.json()
+    assert len(summaries) == 1
+    assert summaries[0]["title"] == "History Final"
+    assert summaries[0]["subject"] == "History"
+
+
+def test_get_paper_by_id() -> None:
+    paper = {"header": {"title": "Physics Mid", "subject": "Physics", "institution": "",
+                        "date": "", "duration": "", "total_marks": 50},
+             "questions": [], "style": {}}
+    saved = client.post("/api/papers", json=paper).json()
+    fetched = client.get(f"/api/papers/{saved['id']}")
+    assert fetched.status_code == 200
+    assert fetched.json()["id"] == saved["id"]
+    assert fetched.json()["header"]["total_marks"] == 50
+
+
+def test_get_paper_not_found() -> None:
+    response = client.get("/api/papers/nonexistent-id")
+    assert response.status_code == 404
+
+
+def test_delete_paper() -> None:
+    saved = client.post("/api/papers", json={"header": {"title": "Delete Me",
+                        "subject": "", "institution": "", "date": "", "duration": "",
+                        "total_marks": 0}, "questions": [], "style": {}}).json()
+    del_resp = client.delete(f"/api/papers/{saved['id']}")
+    assert del_resp.status_code == 200
+    assert client.get(f"/api/papers/{saved['id']}").status_code == 404
+
+
+def test_delete_paper_not_found() -> None:
+    response = client.delete("/api/papers/nonexistent-id")
+    assert response.status_code == 404
+
+
+def test_save_paper_updates_updated_at() -> None:
+    """Re-saving a paper should bump its updated_at timestamp."""
+    paper = {"header": {"title": "Evolving Paper", "subject": "", "institution": "",
+                        "date": "", "duration": "", "total_marks": 0},
+             "questions": [], "style": {}}
+    first = client.post("/api/papers", json=paper).json()
+    import time; time.sleep(0.01)
+    first["header"]["title"] = "Evolved"
+    second = client.post("/api/papers", json=first).json()
+    assert second["updated_at"] >= first["updated_at"]
+    assert second["header"]["title"] == "Evolved"
