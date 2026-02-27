@@ -8,6 +8,24 @@
 
 **Tech Stack:** Python 3.12, FastAPI, python-docx, UV, React 19, TypeScript, TipTap v2, Tailwind CSS v4, Vite, @dnd-kit, Docker (multi-stage build)
 
+**Skills to invoke during implementation** (from `fullstack-dev-skills` plugin):
+
+| Task(s) | Skill to invoke |
+|---------|----------------|
+| 1–2 (project init, FastAPI skeleton) | `fullstack-dev-skills:fastapi-expert` |
+| 3 (Dockerfile, docker-compose) | `fullstack-dev-skills:devops-engineer` |
+| 4–5 (models, storage) | `fullstack-dev-skills:python-pro` |
+| 6–8 (API routes) | `fullstack-dev-skills:fastapi-expert` + `fullstack-dev-skills:api-designer` |
+| 6 (image upload security) | `fullstack-dev-skills:secure-code-guardian` |
+| 9 (write tests first) | `fullstack-dev-skills:test-master` |
+| 10 (DOCX builder) | `fullstack-dev-skills:python-pro` |
+| 11 (export endpoint) | `fullstack-dev-skills:fastapi-expert` |
+| 12 (Vite + React scaffold) | `fullstack-dev-skills:react-expert` |
+| 13 (TypeScript types + API client) | `fullstack-dev-skills:typescript-pro` |
+| 14–18 (UI components) | `fullstack-dev-skills:react-expert` |
+| 19–21 (template, style, export panels) | `fullstack-dev-skills:react-expert` + `fullstack-dev-skills:fullstack-guardian` |
+| 22 (final verification) | `fullstack-dev-skills:devops-engineer` |
+
 ---
 
 ## Project Structure (final target)
@@ -76,6 +94,8 @@ exam-builder/
 ## Phase 1: Foundation
 
 ### Task 1: Initialize UV project + directory structure
+
+> **Skill:** invoke `fullstack-dev-skills:python-pro` before starting this task.
 
 **Files:**
 - Create: `pyproject.toml`
@@ -154,6 +174,8 @@ git commit -m "chore: initialize UV project with directory structure"
 
 ### Task 2: FastAPI app skeleton
 
+> **Skill:** invoke `fullstack-dev-skills:fastapi-expert` before starting this task.
+
 **Files:**
 - Create: `backend/main.py`
 
@@ -228,6 +250,8 @@ git commit -m "feat: add FastAPI app skeleton with health check"
 ---
 
 ### Task 3: Dockerfile + docker-compose
+
+> **Skill:** invoke `fullstack-dev-skills:devops-engineer` before starting this task.
 
 **Files:**
 - Create: `Dockerfile`
@@ -310,6 +334,8 @@ git commit -m "chore: add multi-stage Dockerfile and docker-compose"
 ## Phase 2: Backend Models & Storage
 
 ### Task 4: Pydantic models
+
+> **Skill:** invoke `fullstack-dev-skills:python-pro` before starting this task.
 
 **Files:**
 - Create: `backend/models.py`
@@ -491,6 +517,8 @@ git commit -m "feat: add Pydantic models for Paper, Template, and Question types
 
 ### Task 5: Storage utilities
 
+> **Skill:** invoke `fullstack-dev-skills:python-pro` before starting this task.
+
 **Files:**
 - Create: `backend/storage.py`
 - Create: `tests/conftest.py`
@@ -626,6 +654,8 @@ git commit -m "feat: add JSON storage utilities with CRUD operations"
 
 ### Task 6: Image upload route
 
+> **Skills:** invoke `fullstack-dev-skills:fastapi-expert` + `fullstack-dev-skills:secure-code-guardian` before starting this task (upload validation is a security boundary).
+
 **Files:**
 - Create: `backend/routers/uploads.py`
 
@@ -753,6 +783,8 @@ git commit -m "feat: add image upload endpoint with type and size validation"
 
 ### Task 7: Papers CRUD routes
 
+> **Skills:** invoke `fullstack-dev-skills:fastapi-expert` + `fullstack-dev-skills:api-designer` before starting this task.
+
 **Files:**
 - Create: `backend/routers/papers.py`
 
@@ -866,6 +898,8 @@ git commit -m "feat: add papers CRUD API endpoints"
 
 ### Task 8: Templates CRUD routes
 
+> **Skills:** invoke `fullstack-dev-skills:fastapi-expert` + `fullstack-dev-skills:api-designer` before starting this task.
+
 **Files:**
 - Create: `backend/routers/templates.py`
 
@@ -934,6 +968,8 @@ git commit -m "feat: add templates CRUD API endpoints"
 ## Phase 4: DOCX Generation
 
 ### Task 9: DOCX builder — write tests first
+
+> **Skill:** invoke `fullstack-dev-skills:test-master` before starting this task.
 
 **Files:**
 - Create: `tests/test_docx_builder.py`
@@ -1031,6 +1067,8 @@ Expected: FAIL — `ModuleNotFoundError`
 ---
 
 ### Task 10: DOCX builder implementation
+
+> **Skill:** invoke `fullstack-dev-skills:python-pro` before starting this task.
 
 **Files:**
 - Create: `backend/docx_builder/builder.py`
@@ -1295,6 +1333,8 @@ git commit -m "feat: implement DOCX builder for all question types"
 
 ### Task 11: Export endpoint
 
+> **Skill:** invoke `fullstack-dev-skills:fastapi-expert` before starting this task.
+
 **Files:**
 - Create: `backend/routers/export.py`
 
@@ -1377,6 +1417,8 @@ git commit -m "feat: add export endpoints for .docx paper and answer key"
 ## Phase 5: Frontend Foundation
 
 ### Task 12: Scaffold Vite + React + TipTap + Tailwind
+
+> **Skill:** invoke `fullstack-dev-skills:react-expert` before starting this task.
 
 **Files:**
 - Create: `frontend/` (all files)
@@ -1465,6 +1507,8 @@ git commit -m "chore: scaffold Vite + React + TipTap + Tailwind frontend"
 ---
 
 ### Task 13: TypeScript types + API client
+
+> **Skills:** invoke `fullstack-dev-skills:typescript-pro` + `fullstack-dev-skills:test-master` before starting this task.
 
 **Files:**
 - Create: `frontend/src/types.ts`
@@ -1782,6 +1826,8 @@ git commit -m "feat: add TypeScript types and API client with factories"
 
 ### Task 14: App layout
 
+> **Skill:** invoke `fullstack-dev-skills:react-expert` before starting this task.
+
 **Files:**
 - Create: `frontend/src/App.tsx`
 - Modify: `frontend/src/main.tsx`
@@ -2003,6 +2049,8 @@ git commit -m "feat: add app layout with sidebar for paper navigation"
 
 ### Task 15: Paper header form + PaperEditor shell
 
+> **Skill:** invoke `fullstack-dev-skills:react-expert` before starting this task.
+
 **Files:**
 - Create: `frontend/src/components/PaperEditor.tsx`
 - Create: `frontend/src/components/PaperHeaderForm.tsx`
@@ -2101,6 +2149,8 @@ git commit -m "feat: add paper editor shell and header form"
 ---
 
 ### Task 16: Text and MCQ question components
+
+> **Skill:** invoke `fullstack-dev-skills:react-expert` before starting this task.
 
 **Files:**
 - Create: `frontend/src/components/questions/TextQuestion.tsx`
@@ -2242,6 +2292,8 @@ git commit -m "feat: add Text and MCQ question editor components"
 ---
 
 ### Task 17: Table and Image question components
+
+> **Skills:** invoke `fullstack-dev-skills:react-expert` + `fullstack-dev-skills:secure-code-guardian` before starting this task (image paste/upload is a user input boundary).
 
 **Files:**
 - Create: `frontend/src/components/questions/TableQuestion.tsx`
@@ -2409,6 +2461,8 @@ git commit -m "feat: add Table and Image question editor components"
 ---
 
 ### Task 18: Question list with drag-and-drop
+
+> **Skill:** invoke `fullstack-dev-skills:react-expert` before starting this task.
 
 **Files:**
 - Create: `frontend/src/components/QuestionCard.tsx`
@@ -2628,6 +2682,8 @@ git commit -m "feat: add question list with drag-and-drop reordering"
 
 ### Task 19: Template panel
 
+> **Skills:** invoke `fullstack-dev-skills:react-expert` + `fullstack-dev-skills:fullstack-guardian` before starting this task.
+
 **Files:**
 - Create: `frontend/src/components/TemplatePanel.tsx`
 
@@ -2786,6 +2842,8 @@ git commit -m "feat: add template save/load panel"
 ---
 
 ### Task 20: Style configurator panel
+
+> **Skills:** invoke `fullstack-dev-skills:react-expert` + `fullstack-dev-skills:fullstack-guardian` before starting this task.
 
 **Files:**
 - Create: `frontend/src/components/StylePanel.tsx`
@@ -2958,6 +3016,8 @@ git commit -m "feat: add style configurator (font, margins, logo, header/footer)
 
 ### Task 21: Auto-save + export panel
 
+> **Skills:** invoke `fullstack-dev-skills:react-expert` + `fullstack-dev-skills:fullstack-guardian` before starting this task.
+
 **Files:**
 - Create: `frontend/src/components/ExportPanel.tsx`
 - Modify: `frontend/src/App.tsx`
@@ -3076,6 +3136,8 @@ git commit -m "feat: add export panel and auto-save every 30 seconds"
 ## Final Verification
 
 ### Task 22: End-to-end smoke test
+
+> **Skills:** invoke `fullstack-dev-skills:test-master` + `fullstack-dev-skills:devops-engineer` before starting this task.
 
 **Step 1: Run backend tests**
 
