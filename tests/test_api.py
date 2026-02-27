@@ -215,3 +215,88 @@ def test_save_paper_updates_updated_at() -> None:
     second = client.post("/api/papers", json=first).json()
     assert second["updated_at"] >= first["updated_at"]
     assert second["header"]["title"] == "Evolved"
+
+
+# ── Export ────────────────────────────────────────────────────────────────────
+
+DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
+_PAPER_PAYLOAD = {
+    "header": {"title": "Final Exam", "subject": "Math", "institution": "",
+               "date": "", "duration": "", "total_marks": 0},
+    "questions": [],
+    "style": {},
+}
+
+_MCQ_PAPER_PAYLOAD = {
+    "header": {"title": "Quiz", "subject": "", "institution": "",
+               "date": "", "duration": "", "total_marks": 0},
+    "questions": [
+        {
+            "type": "mcq",
+            "id": "q1",
+            "section": "",
+            "marks": 1,
+            "stem": {"type": "doc", "content": []},
+            "options": [
+                {"label": "A", "text": "Wrong", "is_correct": False},
+                {"label": "B", "text": "Right", "is_correct": True},
+                {"label": "C", "text": "Wrong", "is_correct": False},
+                {"label": "D", "text": "Wrong", "is_correct": False},
+            ],
+        }
+    ],
+    "style": {},
+}
+
+
+def test_export_paper_returns_docx() -> None:
+    response = client.post("/api/papers/export", json=_PAPER_PAYLOAD)
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith(DOCX_MIME)
+    assert len(response.content) > 0
+
+
+def test_export_paper_content_disposition_filename() -> None:
+    response = client.post("/api/papers/export", json=_PAPER_PAYLOAD)
+    assert response.status_code == 200
+    cd = response.headers.get("content-disposition", "")
+    assert "attachment" in cd
+    assert ".docx" in cd
+
+
+def test_export_paper_filename_sanitized() -> None:
+    """Titles with special chars must not produce path-traversal filenames."""
+    payload = dict(_PAPER_PAYLOAD)
+    payload["header"] = {**_PAPER_PAYLOAD["header"], "title": "../../../etc/passwd"}
+    response = client.post("/api/papers/export", json=payload)
+    assert response.status_code == 200
+    cd = response.headers.get("content-disposition", "")
+    assert ".." not in cd
+    assert "/" not in cd.split("filename=")[-1]
+
+
+def test_export_answer_key_returns_docx_when_answers_marked() -> None:
+    response = client.post("/api/papers/export-answer-key", json=_MCQ_PAPER_PAYLOAD)
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith(DOCX_MIME)
+    assert len(response.content) > 0
+
+
+def test_export_answer_key_returns_400_when_no_answers_marked() -> None:
+    payload = dict(_MCQ_PAPER_PAYLOAD)
+    # All options have is_correct=False
+    no_answers = {**_MCQ_PAPER_PAYLOAD["questions"][0]}
+    no_answers["options"] = [
+        {"label": l, "text": "x", "is_correct": False} for l in ("A", "B", "C", "D")
+    ]
+    payload = {**_MCQ_PAPER_PAYLOAD, "questions": [no_answers]}
+    response = client.post("/api/papers/export-answer-key", json=payload)
+    assert response.status_code == 400
+
+
+def test_export_answer_key_filename_includes_answer_key() -> None:
+    response = client.post("/api/papers/export-answer-key", json=_MCQ_PAPER_PAYLOAD)
+    assert response.status_code == 200
+    cd = response.headers.get("content-disposition", "")
+    assert "answer_key" in cd or "answer-key" in cd
