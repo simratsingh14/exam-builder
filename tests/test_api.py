@@ -160,6 +160,50 @@ def test_delete_paper_not_found() -> None:
     assert response.status_code == 404
 
 
+# ── Templates ─────────────────────────────────────────────────────────────────
+
+
+def test_list_templates_empty() -> None:
+    response = client.get("/api/templates")
+    assert response.status_code == 200
+    assert response.json() == []
+
+
+def test_save_and_get_template() -> None:
+    template = {"name": "Midterm Layout", "header": {"title": "", "subject": "",
+                "institution": "", "date": "", "duration": "", "total_marks": 0},
+                "questions": [], "style": {}}
+    saved = client.post("/api/templates", json=template).json()
+    assert saved["name"] == "Midterm Layout"
+    assert "id" in saved
+
+    fetched = client.get(f"/api/templates/{saved['id']}").json()
+    assert fetched["id"] == saved["id"]
+    assert fetched["name"] == "Midterm Layout"
+
+
+def test_list_templates_returns_summary() -> None:
+    client.post("/api/templates", json={"name": "T1", "header": {"title": "", "subject": "",
+                "institution": "", "date": "", "duration": "", "total_marks": 0},
+                "questions": [], "style": {}})
+    summaries = client.get("/api/templates").json()
+    assert len(summaries) == 1
+    assert summaries[0]["name"] == "T1"
+    assert "created_at" in summaries[0]
+
+
+def test_get_template_not_found() -> None:
+    assert client.get("/api/templates/missing").status_code == 404
+
+
+def test_delete_template() -> None:
+    saved = client.post("/api/templates", json={"name": "Bye", "header": {"title": "",
+                "subject": "", "institution": "", "date": "", "duration": "",
+                "total_marks": 0}, "questions": [], "style": {}}).json()
+    assert client.delete(f"/api/templates/{saved['id']}").status_code == 200
+    assert client.get(f"/api/templates/{saved['id']}").status_code == 404
+
+
 def test_save_paper_updates_updated_at() -> None:
     """Re-saving a paper should bump its updated_at timestamp."""
     paper = {"header": {"title": "Evolving Paper", "subject": "", "institution": "",

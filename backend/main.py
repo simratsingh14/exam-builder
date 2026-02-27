@@ -20,9 +20,10 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Exam Builder", lifespan=lifespan)
 
-from .routers import uploads, papers  # noqa: E402
+from .routers import uploads, papers, templates  # noqa: E402
 app.include_router(uploads.router, prefix="/api/uploads", tags=["uploads"])
 app.include_router(papers.router, prefix="/api/papers", tags=["papers"])
+app.include_router(templates.router, prefix="/api/templates", tags=["templates"])
 
 
 @app.get("/api/health")
