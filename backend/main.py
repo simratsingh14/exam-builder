@@ -20,6 +20,9 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Exam Builder", lifespan=lifespan)
 
+from .routers import uploads  # noqa: E402 — after app creation to avoid circular imports
+app.include_router(uploads.router, prefix="/api/uploads", tags=["uploads"])
+
 
 @app.get("/api/health")
 async def health() -> dict[str, str]:
